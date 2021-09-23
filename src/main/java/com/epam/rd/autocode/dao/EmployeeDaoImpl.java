@@ -94,27 +94,27 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public Employee save(Employee employee) {
         try (final Connection conn = ConnectionSource.instance().createConnection()) {
-            String sqlQuery = "INSERT INTO employee VALUES (?,?,?,?,?,?,?,?,?)";
+            String sqlQuery = "INSERT INTO employee  VALUES (?,?,?,?,?,?,?,?,?)";
             PreparedStatement prepareStatement = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-            prepareStatement.setBigDecimal(1, new BigDecimal(employee.getId()));
+            prepareStatement.setInt(1, employee.getId().intValue());
             prepareStatement.setString(2, employee.getFullName().getFirstName());
             prepareStatement.setString(3, employee.getFullName().getLastName());
             prepareStatement.setString(4, employee.getFullName().getMiddleName());
             prepareStatement.setString(5, String.valueOf(employee.getPosition()));
-            prepareStatement.setDate(6, java.sql.Date.valueOf(employee.getHired()));
-            prepareStatement.setBigDecimal(7, employee.getSalary());
-            prepareStatement.setBigDecimal(8, new BigDecimal(employee.getManagerId()));
-            prepareStatement.setBigDecimal(9, new BigDecimal(employee.getDepartmentId()));
-            prepareStatement.executeUpdate();
+            prepareStatement.setInt(6, employee.getManagerId().intValue());
+            prepareStatement.setDate(7, java.sql.Date.valueOf(employee.getHired()));
+            prepareStatement.setDouble(8, employee.getSalary().doubleValue());
+            prepareStatement.setInt(9, employee.getDepartmentId().intValue());
+            int i = prepareStatement.executeUpdate();
             ResultSet generatedKeys = prepareStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 return getById(employee.getId()).get();
             }
         } catch (SQLException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
 
-        return employee;
+        return getById(employee.getId()).get();
     }
 
     @Override
@@ -122,7 +122,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try (final Connection conn = ConnectionSource.instance().createConnection()) {
             String sqlQuery = "DELETE FROM employee WHERE id = ?";
             PreparedStatement prepareStatement = conn.prepareStatement(sqlQuery);
-            prepareStatement.setBigDecimal(1, new BigDecimal(employee.getId()));
+            prepareStatement.setInt(1, employee.getId().intValue());
+            prepareStatement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -133,7 +134,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         List<Employee> employeeList = new ArrayList<>();
         ResultSet resultSet = executeQuery("SELECT * " +
                 "FROM EMPLOYEE e  " +
-                "WHERE department ="+department.getId());
+                "WHERE department =" + department.getId());
         FullName empName;
         Employee employee;
         try {
@@ -151,7 +152,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 BigInteger departmentId = new BigInteger(resultSet.getString("DEPARTMENT"));
                 employee = new Employee(empId, empName, empPosition, empHireDate, empSalary, managerId, departmentId);
                 employeeList.add(employee);
-                    employeeList.add(employee);
+                employeeList.add(employee);
 
             }
         } catch (SQLException throwables) {
@@ -167,7 +168,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         List<Employee> employeeList = new ArrayList<>();
         ResultSet resultSet = executeQuery("SELECT * " +
                 "FROM EMPLOYEE " +
-                "WHERE manager = "+employee.getId());
+                "WHERE manager = " + employee.getId());
         try {
             while (resultSet.next()) {
                 Employee manegerOfEmployee;
@@ -186,7 +187,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 String manager = resultSet.getString("MANAGER");
                 BigInteger managerId = manager != null ? new BigInteger(manager) : new BigInteger(String.valueOf(0));
                 manegerOfEmployee = new Employee(empId, empName, empPosition, empHireDate, empSalary, managerId, departmentId);
-                    employeeList.add(manegerOfEmployee);
+                employeeList.add(manegerOfEmployee);
 
             }
         } catch (SQLException throwables) {
