@@ -22,7 +22,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
              Statement statement = conn.createStatement()) {
             resultSet = statement.executeQuery(inquiry);
         } catch (SQLException e) {
-            e.getSQLState();
+            e.printStackTrace();
         }
         return resultSet;
     }

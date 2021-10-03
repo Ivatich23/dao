@@ -152,7 +152,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
                 BigInteger departmentId = new BigInteger(resultSet.getString("DEPARTMENT"));
                 employee = new Employee(empId, empName, empPosition, empHireDate, empSalary, managerId, departmentId);
                 employeeList.add(employee);
-                employeeList.add(employee);
+
 
             }
         } catch (SQLException throwables) {
