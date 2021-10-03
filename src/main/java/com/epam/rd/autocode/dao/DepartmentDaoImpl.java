@@ -111,7 +111,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 "VALUES(" + depId + "," + depName + "," + depLocation);
 
         return getById(department.getId()).get();
-        //
+
     }
 
     @Override

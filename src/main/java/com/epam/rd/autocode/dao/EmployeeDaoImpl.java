@@ -22,7 +22,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
              Statement statement = conn.createStatement()) {
             resultSet = statement.executeQuery(inquiry);
         } catch (SQLException e) {
-//            e.printStackTrace();
+           e.printStackTrace();
         }
         return resultSet;
     }
