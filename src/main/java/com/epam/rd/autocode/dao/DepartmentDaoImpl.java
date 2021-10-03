@@ -49,9 +49,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 BigInteger departmentId = new BigInteger(resultSet.getString("DEPARTMENT"));
                 employee = new Employee(empId, empName, empPosition, empHireDate, empSalary, managerId, departmentId);
                 employeeList.add(employee);
-                if(employee.getId().equals(department.getId())){
-                    employeeList.add(employee);
-                }
+
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
